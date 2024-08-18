@@ -14,14 +14,17 @@ class Product(BaseProduct, MixinPrint):
         self.name = name
         self.description = description
         self.__price = price
-        self.quantity = quantity
+        if quantity > 0:
+            self.quantity = quantity
+        else:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         super().__init__()
 
     def __str__(self):
         return f"{self.name}, {self.price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        if type(self) == type(other):
+        if type(other) is Product:
             return self.quantity * self.price + other.quantity * other.price
         raise TypeError
 
@@ -44,3 +47,4 @@ class Product(BaseProduct, MixinPrint):
             print("Цена не должна быть нулевая или отрицательная")
         else:
             self.__price = value
+            
